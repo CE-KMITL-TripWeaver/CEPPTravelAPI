@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 
 const placeScheme = mongoose.Schema({
 
+    placeId: {
+        type: String
+    },
     name: {
         type: String,
         require: true
@@ -25,7 +28,7 @@ const placeScheme = mongoose.Schema({
         type: Number,
         require: true
     },
-    longtitude: {
+    longitude: {
         type: Number,
         require: true
     },
@@ -34,7 +37,7 @@ const placeScheme = mongoose.Schema({
             type: String
         },
         province: {
-            provinceID: {
+            provinceId: {
                 type: Number
             },
             name: {
@@ -42,7 +45,7 @@ const placeScheme = mongoose.Schema({
             },
         },
         district: {
-            districtID: {
+            districtId: {
                 type: Number
             },
             name: {
@@ -67,7 +70,7 @@ const placeScheme = mongoose.Schema({
     tags: {
         type: [String]
     },
-    createAt: {
+    createdAt: {
         type: String
     },
     updatedAt: {
