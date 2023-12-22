@@ -22,7 +22,22 @@ const placeScheme = mongoose.Schema({
         }
     },
     sha: {
-        type: String,
+        type: {
+            typeId: {
+                type: Number
+            },
+            name: {
+                type: String
+            }
+        },
+        category: {
+            categoryId: {
+                type: Number
+            },
+            name: {
+                type: String
+            }
+        }
     },
     latitude: {
         type: Number,

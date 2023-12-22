@@ -10,8 +10,49 @@ const getAllPlaces = asyncHandler(async (req,res) => {
 // Create new place => POST api/places/create
 const createPlace = asyncHandler(async (req,res) => {
     try {
-        const place = await places.create(req.body);
-        res.status(200).json(place);
+        
+        const data = req.body;
+        //console.log(req.body);
+
+        let existingPlace;
+
+        if(Array.isArray(data)) {
+            for (let i = 0 ; i < data.length ; i++) {
+                const place = data[i];
+
+                existingPlace = await places.findOne(
+                    {
+                        "name": place.name,
+                        "location.province.provinceId": place.location.province.provinceId
+                    }    
+                )
+
+                if(existingPlace) {
+                    console.log(`Name: ${place.name} and ${ place.location.province.provinceId} already exists`);
+                    continue;
+                }
+
+                const placeCreated = await places.create(place);
+            }
+
+            return res.status(200).json(`Created multiple data successfully!`);
+        } else {
+            const {name, location: {province: {provinceId} }} = req.body;
+
+            existingPlace = await places.findOne(
+                {
+                    "name": name,
+                    "location.province.provinceId": provinceId
+                }    
+            )
+
+            if(existingPlace) {
+                return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
+            }
+            const placeCreated = await places.create(req.body);
+        }
+        return res.status(200).json(req.body);
+
     } catch(err) {
         console.log(err);
     }
@@ -64,6 +105,19 @@ const updatePlace = asyncHandler(async (req,res) => {
             return res.status(404).send("Places ID not found!");
         }
 
+        const {name, location: {province: {provinceId} }} = req.body;
+
+        existingPlace = await places.findOne(
+            {
+                "name": name,
+                "location.province.provinceId": provinceId
+            }    
+        )
+
+        if(existingPlace) {
+            return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
+        }
+
         targetPlace = await places.findByIdAndUpdate(req.params.id, req.body,{
             new: true
         })
@@ -74,4 +128,12 @@ const updatePlace = asyncHandler(async (req,res) => {
     }
 });
 
-module.exports = { getAllPlaces, createPlace, deletePlace, getSinglePlace, updatePlace};
+
+// Delete place => api/places/deleteAll
+const deleteAllPlaces = asyncHandler(async (req,res) => {
+    await places.deleteMany( { } );
+
+    return res.status(200).json({ message: `Deleted all data!`})
+}) 
+
+module.exports = { getAllPlaces, createPlace, deletePlace, getSinglePlace, updatePlace, deleteAllPlaces};
