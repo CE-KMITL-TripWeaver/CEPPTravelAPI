@@ -127,7 +127,7 @@ const updatePlace = asyncHandler(async (req,res) => {
     }
 });
 
-// Get multiple places that match District  => GET api/places/search/district/?district=test
+// Get multiple places that match District  => GET api/places/searchs/data/?province=ราชบุรี&district=เมืองราชบุรี
 const searchPlaceByDistrict = asyncHandler(async (req,res) => {
     try {
         const { province,district,subDistrict } = req.query;
@@ -155,7 +155,7 @@ const searchPlaceByDistrict = asyncHandler(async (req,res) => {
 
 // Delete place => api/places/deleteAll
 const deleteAllPlaces = asyncHandler(async (req,res) => {
-    await places.deleteMany( { } );
+    //await places.deleteMany( { } );
 
     return res.status(200).json({ message: `Deleted all data!`})
 }) 
