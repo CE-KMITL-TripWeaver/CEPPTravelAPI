@@ -34,6 +34,7 @@ const createPlace = asyncHandler(async (req,res) => {
 
                 if(place.category.categoryId === 8 || place.category.categoryId === 2) { // 8 = Food Shop , 2 = Accommodation
                     console.log(`Name: ${place.name} and ${place.location.province.provinceId} not match categoryID with ${place.category.categoryId}`);
+                    continue;
                 }
 
                 const placeCreated = await places.create(place);
@@ -116,28 +117,36 @@ const updatePlace = asyncHandler(async (req,res) => {
             return res.status(404).send("Places ID not found!");
         }
 
-        const {name, location: {province: {provinceId} }, category: {categoryId}} = req.body;
-
-        const existingPlace = await places.findOne(
-            {
-                "name": name,
-                "location.province.provinceId": provinceId
-            }    
-        )
-
-        if(existingPlace) {
-            return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
-        }
-
-        if(categoryId === 8 || categoryId === 2) { // 8 = Food Shop , 2 = Accomodation
-            return res.status(400).json({ message: `Name: ${name} and ${provinceId} not match categoryID with ${categoryId}`});
-        }
-
         targetPlace = await places.findByIdAndUpdate(req.params.id, req.body,{
             new: true
         })
 
         res.status(200).json(targetPlace);
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+// Get multiple places that match District  => GET api/places/search/district/?district=test
+const searchPlaceByDistrict = asyncHandler(async (req,res) => {
+    try {
+        const { province,district,subDistrict } = req.query;
+        
+        let placesList;
+        if(province) {
+            placesList = await places.find({'location.province.name': province});
+        }
+
+        if(district) {
+            placesList = await places.find({'location.district.name': district});
+        }
+
+        if(subDistrict) {
+            placesList = await places.find({'location.subDistrict.name': subDistrict});
+        }
+
+        return res.status(200).json(placesList);
+
     } catch(err) {
         console.log(err);
     }
@@ -151,4 +160,4 @@ const deleteAllPlaces = asyncHandler(async (req,res) => {
     return res.status(200).json({ message: `Deleted all data!`})
 }) 
 
-module.exports = { getAllPlaces, createPlace, deletePlace, getSinglePlace, updatePlace, deleteAllPlaces};
+module.exports = { getAllPlaces, createPlace, deletePlace, getSinglePlace, updatePlace, deleteAllPlaces, searchPlaceByDistrict};
