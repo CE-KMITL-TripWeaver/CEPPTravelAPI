@@ -32,12 +32,16 @@ const createPlace = asyncHandler(async (req,res) => {
                     continue;
                 }
 
+                if(place.category.categoryId === 8 || place.category.categoryId === 2) { // 8 = Food Shop , 2 = Accommodation
+                    console.log(`Name: ${place.name} and ${place.location.province.provinceId} not match categoryID with ${place.category.categoryId}`);
+                }
+
                 const placeCreated = await places.create(place);
             }
 
             return res.status(200).json(`Created multiple data successfully!`);
         } else {
-            const {name, location: {province: {provinceId} }} = req.body;
+            const {name, location: {province: {provinceId} }, category: {categoryId}} = req.body;
 
             existingPlace = await places.findOne(
                 {
@@ -49,6 +53,13 @@ const createPlace = asyncHandler(async (req,res) => {
             if(existingPlace) {
                 return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
             }
+
+            if(categoryId === 8 || categoryId === 2) { // 8 = Food Shop , 2 = Accommodation
+                return res.status(400).json({ message: `Name: ${name} and ${provinceId} not match categoryID with ${categoryId}`});
+            }
+
+
+
             const placeCreated = await places.create(req.body);
         }
         return res.status(200).json(req.body);
@@ -105,9 +116,9 @@ const updatePlace = asyncHandler(async (req,res) => {
             return res.status(404).send("Places ID not found!");
         }
 
-        const {name, location: {province: {provinceId} }} = req.body;
+        const {name, location: {province: {provinceId} }, category: {categoryId}} = req.body;
 
-        existingPlace = await places.findOne(
+        const existingPlace = await places.findOne(
             {
                 "name": name,
                 "location.province.provinceId": provinceId
@@ -116,6 +127,10 @@ const updatePlace = asyncHandler(async (req,res) => {
 
         if(existingPlace) {
             return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
+        }
+
+        if(categoryId === 8 || categoryId === 2) { // 8 = Food Shop , 2 = Accomodation
+            return res.status(400).json({ message: `Name: ${name} and ${provinceId} not match categoryID with ${categoryId}`});
         }
 
         targetPlace = await places.findByIdAndUpdate(req.params.id, req.body,{
