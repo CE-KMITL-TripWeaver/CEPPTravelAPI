@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/places",require('./routes/placeRoutes'));
+app.use("/api/hotels",require('./routes/hotelRoutes'));
 
 connectDb();
  
