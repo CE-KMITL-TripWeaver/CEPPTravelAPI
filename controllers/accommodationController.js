@@ -15,8 +15,16 @@ const createAccommodation = asyncHandler(async (req,res) => {
         //console.log(req.body);
 
         let existingAccommodation;
+        let checkLatLong;
 
-        const {name, location: {province: {provinceId} } } = req.body;
+        const {name, location: {province: {provinceId} },latitude,longitude } = req.body;
+
+        checkLatLong = await accommodation.findOne(
+            {
+                "latitude": latitude,
+                "longitude": longitude
+            }      
+        )
 
         existingAccommodation = await accommodation.findOne(
             {
@@ -24,8 +32,9 @@ const createAccommodation = asyncHandler(async (req,res) => {
                 "location.province.provinceId": provinceId
             }      
         )
+        
 
-        if(existingAccommodation) {
+        if(existingAccommodation || checkLatLong) {
             return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
         }
 
@@ -122,7 +131,7 @@ const searchAccommodationByDistrict = asyncHandler(async (req,res) => {
 
 // Delete accommodation  => api/accommodations/deleteAll
 const deleteAllAccommodation = asyncHandler(async (req,res) => {
-    //await accommodation.deleteMany( { } );
+    await accommodation.deleteMany( { } );
 
     return res.status(200).json({ message: `Deleted all data!`})
 }) 

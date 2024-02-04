@@ -10,10 +10,6 @@ const placeScheme = mongoose.Schema({
         type: String,
         required: true
     },
-    type: {
-        type: [String],
-        required: true
-    },
     tags: {
         type: [String],
         required: true

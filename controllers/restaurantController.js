@@ -15,9 +15,16 @@ const createRestaurant = asyncHandler(async (req,res) => {
         //console.log(req.body);
 
         let existingRestaurant;
+        let checkLatLong;
 
-        const {name, location: {province: {provinceId} } } = req.body;
+        const {name, location: {province: {provinceId} },latitude,longitude } = req.body;
 
+        checkLatLong = await restaurant.findOne(
+            {
+                "latitude": latitude,
+                "longitude": longitude
+            }      
+        )
         existingRestaurant = await restaurant.findOne(
             {
                 "name": name,
@@ -25,7 +32,7 @@ const createRestaurant = asyncHandler(async (req,res) => {
             }      
         )
 
-        if(existingRestaurant) {
+        if(existingRestaurant || checkLatLong) {
             return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
         }
 
@@ -122,7 +129,7 @@ const searchRestaurantByDistrict = asyncHandler(async (req,res) => {
 
 // Delete restaurant  => api/restaurants/deleteAll
 const deleteAllRestaurant = asyncHandler(async (req,res) => {
-    //await restaurant.deleteMany( { } );
+    await restaurant.deleteMany( { } );
 
     return res.status(200).json({ message: `Deleted all data!`})
 }) 

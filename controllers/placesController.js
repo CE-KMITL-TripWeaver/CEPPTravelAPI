@@ -15,8 +15,16 @@ const createPlace = asyncHandler(async (req,res) => {
         //console.log(req.body);
 
         let existingPlace;
+        let checkLatLong;
 
-        const {name, location: {province: {provinceId} } } = req.body;
+        const {name, location: {province: {provinceId} },latitude,longitude } = req.body;
+
+        checkLatLong = await places.findOne(
+            {
+                "latitude": latitude,
+                "longitude": longitude
+            }      
+        )
 
         existingPlace = await places.findOne(
             {
@@ -25,7 +33,7 @@ const createPlace = asyncHandler(async (req,res) => {
             }    
         )
 
-        if(existingPlace) {
+        if(existingPlace || checkLatLong) {
             return res.status(400).json({ message: `Name: ${name} and ${provinceId} already exists`});
         }
 
@@ -122,7 +130,7 @@ const searchPlaceByDistrict = asyncHandler(async (req,res) => {
 
 // Delete place => api/places/deleteAll
 const deleteAllPlaces = asyncHandler(async (req,res) => {
-    //await places.deleteMany( { } );
+    await places.deleteMany( { } );
 
     return res.status(200).json({ message: `Deleted all data!`})
 }) 
