@@ -11,7 +11,7 @@ app.use("/api/places",require('./routes/placeRoutes'));
 app.use("/api/restaurants",require('./routes/restaurantRoutes'));
 app.use("/api/accommodations",require('./routes/accommodationRoutes'));
 
-connectDb();
+connectDb(); 
  
 app.listen(process.env.PORT, () => {
     console.log(`server running on port ${process.env.PORT}`);
