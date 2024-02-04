@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const placeScheme = mongoose.Schema({
+const accommodationScheme = mongoose.Schema({
 
     name: {
         type: String,
@@ -21,7 +21,7 @@ const placeScheme = mongoose.Schema({
     facilities: {
         type: [String],
     },
-    activities: {
+    roomType: {
         type: [String],
         required: true
     },
@@ -35,7 +35,7 @@ const placeScheme = mongoose.Schema({
     },
     location: {
         address: {
-            type: String,
+            type: String, 
             required: true
         },
         province: {
@@ -83,36 +83,22 @@ const placeScheme = mongoose.Schema({
             type: Number
         }
     },
-    openingHours: [{
-        day: {
-            type: String
-        },
-        open: {
-            type: String
-        },
-        close: {
-            type: String
-        }
-    }],
-    ticketRate: [{ 
-        foreignerStatus: {
-            type: String,
-            enum: ["Thai", "Foreigner"],
-        },
-        ageGroup: {
-            type: String,
-            enum: ["Child", "Adult"],
-        },
-        price: {
-            type: Number
-        } 
-    }],
     contact: {
         type: [String]
     },
     publicTransportation: {
         type: [String]
-    }
+    },
+    priceRange: [{
+        minPrice: {
+            type: Number,
+            required: true
+        },
+        maxPrice: {
+            type: Number,
+            required: true
+        },
+    }]
 });
 
-module.exports = mongoose.model('places',placeScheme);
+module.exports = mongoose.model('accommodations',accommodationScheme);
