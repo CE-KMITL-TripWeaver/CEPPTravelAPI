@@ -4,6 +4,9 @@ const accommodation = require('../models/accommodation');
 // Get all accommodation => GET api/accommodations
 const getAllAccommodation = asyncHandler(async (req,res) => {
     const accommodationList  = await accommodation.find();
+
+    console.log(accommodationList.length);
+
     res.status(200).json(accommodationList);
 });
 

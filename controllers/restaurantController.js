@@ -4,6 +4,7 @@ const restaurant = require('../models/restaurant');
 // Get all restaurant => GET api/restaurant
 const getAllRestaurant = asyncHandler(async (req,res) => {
     const restaurantList  = await restaurant.find();
+    console.log(restaurantList.length);
     res.status(200).json(restaurantList);
 });
 

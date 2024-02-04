@@ -4,6 +4,7 @@ const places = require('../models/places');
 // Get all places => GET api/places
 const getAllPlaces = asyncHandler(async (req,res) => {
     const placesList  = await places.find();
+    console.log(placesList.length);
     res.status(200).json(placesList);
 });
 
