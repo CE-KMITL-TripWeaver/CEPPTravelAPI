@@ -21,10 +21,6 @@ const accommodationScheme = mongoose.Schema({
     facilities: {
         type: [String],
     },
-    roomType: {
-        type: [String],
-        required: true
-    },
     latitude: {
         type: Number,
         required: true
@@ -92,16 +88,10 @@ const accommodationScheme = mongoose.Schema({
     publicTransportation: {
         type: [String]
     },
-    priceRange: [{
-        minPrice: {
-            type: Number,
-            required: true
-        },
-        maxPrice: {
-            type: Number,
-            required: true
-        },
-    }]
+    minPrice: {
+        type: Number,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('accommodations',accommodationScheme);
