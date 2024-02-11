@@ -6,10 +6,6 @@ const accommodationScheme = mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    },
     type: {
         type: [String],
         required: true
@@ -83,9 +79,6 @@ const accommodationScheme = mongoose.Schema({
         type: [Number]
     },
     contact: {
-        type: [String]
-    },
-    publicTransportation: {
         type: [String]
     },
     minPrice: {

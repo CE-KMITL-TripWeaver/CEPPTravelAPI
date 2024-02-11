@@ -6,10 +6,6 @@ const restaurantScheme = mongoose.Schema({
         type: String,
         required: true
     },
-    description: {
-        type: String,
-        required: true
-    },
     type: {
         type: [String],
         required: true
@@ -80,9 +76,6 @@ const restaurantScheme = mongoose.Schema({
         }
     },
     contact: {
-        type: [String]
-    },
-    publicTransportation: {
         type: [String]
     },
     openingHours: [{
