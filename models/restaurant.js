@@ -71,11 +71,11 @@ const restaurantScheme = mongoose.Schema({
     updatedAt: {
         type: String
     },
-    reviews: {
+    rating: {
         score: {
             type: Number
         },
-        reviewerCount: {
+        ratingCount: {
             type: Number
         }
     },
